@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVR Hospital - Professional Medical System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <!-- CSS Section Start -->
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto Slab', serif; }
+        body { background-color: #e9f0f5; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        @page { margin: 0; size: auto; }
+        .web-page-header { width: 100%; height: 20mm; background: #ffffff; color: #1a252f; display: flex; align-items: center; padding: 0 40px; border-bottom: 3px solid #1a252f; box-shadow: 0 4px 10px rgba(0,0,0,0.05); flex-shrink: 0; }
+        .web-logo { height: 14mm; margin-right: 18px; border-radius: 6px; }
+        .web-header-info { display: flex; flex-direction: column; justify-content: center; }
+        .web-h-name { font-size: 17px; font-weight: 900; letter-spacing: 0.2px; color: #1a252f; }
+        .web-h-title { font-size: 10px; font-weight: 600; opacity: 0.8; text-transform: uppercase; letter-spacing: 1.5px; color: #2c3e50; }
+        .main-content-wrapper { flex-grow: 1; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 0; }
+        #login-section { background: white; padding: 40px; border-radius: 12px; width: 400px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border-top: 6px solid #1a252f; display: block; }
+        #login-section h2 { font-size: 22px; margin-bottom: 25px; color: #1a252f; font-weight: 900; letter-spacing: 1px; }
+        .login-field { margin-bottom: 20px; text-align: left; }
+        .login-field label { font-size: 11px; font-weight: 800; display: block; margin-bottom: 6px; color: #444; text-transform: uppercase; }
+        .login-field input { width: 100%; padding: 14px; border: 1.5px solid #dfe6e9; border-radius: 8px; font-size: 15px; outline: none; transition: border 0.3s; }
+        .login-field input:focus { border-color: #1a252f; }
+        .btn-login { background-color: #1a252f; color: white; width: 100%; margin-top: 10px; height: 50px; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; border: none; border-radius: 8px; font-weight: 700; text-transform: uppercase; font-size: 14px; transition: opacity 0.2s; }
+        .btn-login svg { width: 20px; height: 20px; fill: white; }
+        #app-dashboard { width: 100%; display: none; flex-direction: column; align-items: center; }
+        .input-panel { background: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); width: 100%; max-width: 1000px; margin-bottom: 20px; border-top: 5px solid #1a252f; }
+        .input-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 12px; }
+        .field { display: flex; flex-direction: column; }
+        .field label { font-size: 10px; font-weight: 800; color: #2c3e50; margin-bottom: 4px; text-transform: uppercase; }
+        .field input, .field select { padding: 8px 12px; border: 1.5px solid #dfe6e9; border-radius: 6px; outline: none; font-size: 13px; transition: all 0.2s; }
+        .field input:focus { border-color: #1a252f; background: #f8f9fa; }
+        .action-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 15px; flex-wrap: wrap; }
+        .btn { padding: 10px 22px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; text-transform: uppercase; font-size: 12px; transition: transform 0.1s, opacity 0.2s; }
+        .btn:active { transform: scale(0.96); }
+        .btn-add { background-color: #27ae60; color: white; }
+        .btn-print { background-color: #2c3e50; color: white; }
+        .btn-download { background-color: #d35400; color: white; }
+        .btn-clear { background-color: #c0392b; color: white; }
+        .page-boundary { width: 210mm; height: 120mm; background: #fff5f5; padding: 1.5mm; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        .receipt-container { width: calc(100% - 3mm); height: calc(100% - 3mm); background: #fff5f5; padding: 0 5mm 3mm 5mm; position: relative; display: flex; flex-direction: column; border: 1.2px solid #000; box-sizing: border-box; overflow: hidden; }
+        .watermark { position: absolute; top: 55%; left: 50%; transform: translate(-50%, -50) rotate(-35deg); font-size: 80px; font-weight: 900; color: rgba(139, 0, 0, 0.04); white-space: nowrap; pointer-events: none; z-index: 0; text-transform: uppercase; }
+        .receipt-header { display: flex; align-items: center; border-bottom: 1px solid #000; height: 20mm; position: relative; z-index: 1; overflow: hidden; }
+        .logo-box { flex: 0 0 15mm; margin-right: 12px; display: flex; align-items: center; justify-content: center; }
+        .logo-box img { height: 14mm; width: auto; display: block; border-radius: 4px; }
+        .header-text { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+        .hospital-name { font-size: 13.5px; font-weight: 900; color: #000; line-height: 1; margin-bottom: 1px; }
+        .receipt-title { font-size: 9.5px; font-weight: 700; color: #000; letter-spacing: 0.8px; margin-bottom: 1px; }
+        .hospital-address { font-size: 7.5px; color: #000; white-space: nowrap; font-weight: 400; }
+        .patient-info-grid { display: grid; grid-template-columns: 1.2fr 2fr 0.8fr 1fr; font-size: 9.5px; margin-top: 2px; padding: 4px 0; border-bottom: 1px dashed #000; line-height: 1.1; position: relative; z-index: 1; }
+        .medicine-area { flex-grow: 1; overflow: hidden; display: flex; flex-direction: column; margin-top: 2px; position: relative; z-index: 1; }
+        .medicine-table { width: 100%; border-collapse: collapse; font-size: 10.5px; table-layout: fixed; }
+        .medicine-table th { border-bottom: 1px solid #000; text-align: left; padding: 2px 3px; background: rgba(0,0,0,0.02); font-size: 8px; font-weight: 900; color: #000; }
+        .medicine-table td { padding: 1.5px 3px; border: none; vertical-align: middle; word-wrap: break-word; line-height: 1; height: 17px; }
+        .col-sno { width: 35px; } .col-desc { width: auto; } .col-qty { width: 45px; } .col-rate { width: 70px; } .col-total { width: 80px; }
+        .total-section { text-align: right; padding-top: 3px; border-top: 1px solid #000; margin-top: 0; position: relative; z-index: 1; }
+        .total-label { font-weight: 900; font-size: 12.5px; color: #000; }
+        .web-footer { width: 100%; background: #ffffff; padding: 15px 0; text-align: center; border-top: 1px solid #ddd; flex-shrink: 0; }
+        .footer-text { font-size: 11px; color: #333; font-weight: 600; }
+        .receipt-footer-note { position: absolute; bottom: 3mm; left: 5mm; font-size: 7.5px; font-style: italic; color: #333; z-index: 1; }
+        @media print { body { background: none; padding: 0; } .web-page-header, .input-panel, .action-buttons, .web-footer, #login-section { display: none !important; } .page-boundary { width: 210mm; height: 120mm; padding: 0; margin: 0; background: #fff5f5; box-shadow: none; display: flex !important; } .receipt-container { border: 1.2px solid #000; width: calc(210mm - 3mm); height: calc(120mm - 3mm); margin: 1.5mm; } }
+    </style>
+    <!-- CSS Section End -->
+</head>
+<body>
+
+    <!-- Body Section Start -->
+    <header class="web-page-header"><img src="https://dsvsrh.github.io/SVRIMG-2026/PAGE_FEVICON_ICON_NO_BG_HEADER_LOGO.png" alt="SVR Logo" class="web-logo"><div class="web-header-info"><div class="web-h-name">Dr. S. Venkata Subba Reddy Multispecialty Hospital</div><div class="web-h-title">Medical Receipt System</div></div></header>
+    <div class="main-content-wrapper"><div id="login-section"><h2>USER LOGIN</h2><div class="login-field"><label>Login ID</label><input type="text" id="log-id" placeholder="ID Number" oninput="this.value = this.value.toUpperCase()"></div><div class="login-field"><label>Password</label><input type="password" id="log-pass" placeholder="Password"></div><button class="btn-login" id="login-btn" onclick="handleLogin()"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>Sign In Now</button><p id="log-msg" style="font-size:12px; margin-top:15px; font-weight: 700;"></p></div><div id="app-dashboard"><div class="input-panel" id="input-form"><div class="input-group"><div class="field"><label>Patient ID</label><input type="text" id="in-pid" class="nav-input" placeholder="ID No" tabindex="1"></div><div class="field"><label>Patient Name</label><input type="text" id="in-pname" class="nav-input" placeholder="Full Name" tabindex="2"></div><div class="field"><label>Age</label><input type="number" id="in-page" class="nav-input" placeholder="Age" tabindex="3"></div><div class="field"><label>Gender</label><select id="in-pgender" class="nav-input" tabindex="4"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div></div><div class="input-group" style="border-top: 1px solid #f1f2f6; padding-top: 12px;"><div class="field"><label>Short Name</label><input type="text" id="in-mshort" class="nav-input" placeholder="Short Name" tabindex="5"></div><div class="field"><label>Medicine Full Name</label><input type="text" id="in-mfull" class="nav-input" placeholder="Full Details" tabindex="6"></div><div class="field"><label>Quantity</label><input type="number" id="in-mqty" class="nav-input" value="1" tabindex="7"></div><div class="field"><label>Rate</label><input type="number" id="in-mprice" class="nav-input" placeholder="Rate" tabindex="8"></div></div><div class="action-buttons"><button class="btn btn-add" id="btn-add" onclick="addMedicine()">Add Item</button><button class="btn btn-download" onclick="downloadPDF()">Download PDF</button><button class="btn btn-print" onclick="printReceipt()">Print Receipt</button><button class="btn btn-clear" onclick="clearAll()">Clear All</button></div></div><div class="page-boundary" id="pdf-area"><div class="receipt-container" id="receipt-content"><div class="watermark">SVR Hospital</div><div class="receipt-header"><div class="logo-box"><img src="https://dsvsrh.github.io/SVRIMG-2026/PAGE_FEVICON_ICON_NO_BG_HEADER_LOGO.png" alt="Icon"></div><div class="header-text"><div class="hospital-name">Dr. S. Venkata Subba Reddy Multispecialty Hospital</div><div class="receipt-title">MEDICINE RECEIPT</div><div class="hospital-address">Church Masjid Street, ALLAGADDA - 518543, Nandyal District, Andhra Pradesh.</div></div></div><div class="patient-info-grid"><div><strong>ID</strong> <span id="out-pid"></span></div><div><strong>Patient</strong> <span id="out-pname"></span></div><div><strong>Age</strong> <span id="out-page"></span></div><div><strong>Gender</strong> <span id="out-pgender"></span></div></div><div class="medicine-area"><table class="medicine-table"><thead><tr><th class="col-sno">S.NO</th><th class="col-desc">Medicine Description</th><th class="col-qty">Qty</th><th class="col-rate">Rate</th><th class="col-total">Total</th></tr></thead><tbody id="medicine-list"></tbody></table></div><div class="total-section"><span class="total-label">GRAND TOTAL ₹ <span id="out-total">0.00</span></span></div><div class="receipt-footer-note">Note: Computer generated medical record. All amounts in INR.</div></div></div></div></div>
+    <footer class="web-footer"><div class="footer-text">&copy; Dr S Venkata Subba Reddy Hospital Architecture by Sri Veda</div></footer>
+    <!-- Body Section End -->
+
+    <!-- Script Section Start -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxE9a4VJrplc5wHzy94O0YFB3IERaZ9_DVFOKoRH9OeegiATLkeFhxKHeBflDCrV25a/exec";
+        let medicines = [];
+        const updatePatientDisplay = () => { document.getElementById('out-pid').innerText = document.getElementById('in-pid').value || ''; document.getElementById('out-pname').innerText = document.getElementById('in-pname').value || ''; document.getElementById('out-page').innerText = document.getElementById('in-page').value || ''; document.getElementById('out-pgender').innerText = document.getElementById('in-pgender').value || ''; };
+        async function handleLogin() { const id = document.getElementById('log-id').value; const pass = document.getElementById('log-pass').value; if(!id || !pass) return; document.getElementById('log-msg').style.color = "blue"; document.getElementById('log-msg').innerText = "Verifying Credentials..."; try { const response = await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ loginId: id, password: pass }) }); document.getElementById('log-msg').style.color = "green"; document.getElementById('log-msg').innerText = "Login Successful! Loading Dash..."; setTimeout(() => { document.getElementById('login-section').style.display = 'none'; document.getElementById('app-dashboard').style.display = 'flex'; }, 800); } catch(e) { document.getElementById('log-msg').style.color = "red"; document.getElementById('log-msg').innerText = "System Connection Error."; } }
+        function addMedicine() { const m = { short: document.getElementById('in-mshort').value, full: document.getElementById('in-mfull').value, qty: parseFloat(document.getElementById('in-mqty').value) || 0, price: parseFloat(document.getElementById('in-mprice').value) || 0 }; if(!m.full || !m.price) return; medicines.push(m); renderTable(); updatePatientDisplay(); clearMedInputs(); document.getElementById('in-mshort').focus(); }
+        function renderTable() { const tbody = document.getElementById('medicine-list'); tbody.innerHTML = ''; let grandTotal = 0; medicines.forEach((m, i) => { const rowTotal = m.qty * m.price; grandTotal += rowTotal; tbody.innerHTML += `<tr><td>${i+1}</td><td><strong>${m.short}</strong> ${m.full}</td><td>${m.qty}</td><td>${m.price.toFixed(2)}</td><td>${rowTotal.toFixed(2)}</td></tr>`; }); const emptyCount = medicines.length >= 15 ? 0 : 15 - medicines.length; for(let i=0; i<emptyCount; i++) { tbody.innerHTML += `<tr><td></td><td></td><td></td><td></td><td></td></tr>`; } document.getElementById('out-total').innerText = grandTotal.toFixed(2); }
+        function clearMedInputs() { document.getElementById('in-mshort').value = ''; document.getElementById('in-mfull').value = ''; document.getElementById('in-mqty').value = '1'; document.getElementById('in-mprice').value = ''; }
+        function clearAll() { if(confirm("Reset all form data?")) { medicines = []; document.querySelectorAll('#input-form input').forEach(i => i.value = ''); document.getElementById('in-pgender').selectedIndex = 0; document.getElementById('in-mqty').value = '1'; renderTable(); updatePatientDisplay(); } }
+        function printReceipt() { updatePatientDisplay(); window.print(); }
+        function downloadPDF() { updatePatientDisplay(); const element = document.getElementById('pdf-area'); html2pdf().set({ margin: 0, filename: `SVR_Bill_${Date.now()}.pdf`, image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 3, useCORS: true, backgroundColor: '#fff5f5' }, jsPDF: { unit: 'mm', format: [210, 120], orientation: 'portrait' } }).from(element).save(); }
+        document.querySelectorAll('.nav-input').forEach(el => el.addEventListener('keydown', (e) => { if(e.key === 'Enter') { e.preventDefault(); const nextTab = el.tabIndex + 1; const nextEl = document.querySelector(`[tabindex="${nextTab}"]`); if(nextEl) { nextEl.focus(); } else if(el.id === 'in-mprice') { addMedicine(); } } }));
+        document.getElementById('log-pass').addEventListener('keydown', (e) => { if(e.key === 'Enter') handleLogin(); });
+        document.querySelectorAll('.nav-input').forEach(el => el.addEventListener('input', updatePatientDisplay)); window.onload = () => { renderTable(); };
+    </script>
+    <!-- Script Section End -->
+
+</body>
+</html>
